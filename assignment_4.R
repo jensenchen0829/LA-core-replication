@@ -1,7 +1,7 @@
 #############################################################################
 ## Cascade CEA Model - Interventions
 ## Deterministic, at the ideal scale: determine when epidemic control is reached reached (defined as a new incidence rate of 1 per 10,000) or, 
-## if the target canâ€™t be reached, what is the minimum incidence that can be reached by the last year of the evaluation period.
+## if the target can’t be reached, what is the minimum incidence that can be reached by the last year of the evaluation period.
 ## int.sus is modified to 20
 ## Last updated: Apr 13, 2020
 #############################################################################
@@ -17,7 +17,8 @@ source("CascadeCEA-Interventions-1-LoadBaselineWorkspace.R")
 CITY <- select.list(all.cities, multiple = FALSE,
                     title = 'Select city', graphics = FALSE)
 
-# ww <- 1; CITY <- all.cities[[ww]] # Otherwise you can set city by its index
+ww <- 3
+CITY <- all.cities[[ww]] # Otherwise you can set city by its index
 
 ## LOAD list of all combinations, interventions indexed by number in each combination
 # if unavailable, source("CascadeCEA-Combination-0-Setup-combination.list.R")
@@ -54,5 +55,6 @@ colnames(outcome.dm.mx)[33:44] <- c("QALYs.sum", "costs.total.sum", "costs.hru.s
                                     "int.impl.costs.sum", "int.sust.costs.sum")
 outcome.dm.mx[2, ]      <- comb.eva.func(input.parameters = all.params, current.int = current.int)
 new.incidence.by.year<-outcome.dm.mx[2,7:32]
-which(new.incidence.by.year/6755896<=0.0001)#integer(0)
-which.min(new.incidence.by.year/6755896)#Year 2034
+which(new.incidence.by.year/6755896<=0.0001)#integer(0), the target cannot be reached
+which.min(new.incidence.by.year/6755896)#gives the year of minimum new incidence rate
+min(new.incidence.by.year/6755896)#minimum new incidence rate
