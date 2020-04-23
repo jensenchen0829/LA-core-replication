@@ -10,15 +10,14 @@
 rm(list=ls())
 library(rstudioapi)
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
-source("CascadeCEA-Interventions-1-LoadBaselineWorkspace.R")
+source("CascadeCEA-Interventions-1-LoadBaselineWorkspace.R")  #in this RScript the int.sus=10
 
 # SELECT city ##
-CITY <- select.list(all.cities, multiple = FALSE,
-                    title = 'Select city', graphics = FALSE)
-
 ww <- 3
-CITY <- all.cities[[ww]] # Otherwise you can set city by its index
+CITY <- all.cities[[ww]] # set CITY to "LA"
+
+int.sus<- 20 #change intervention sustainment duration 
+int.end <- (int.start + (int.sus * 12))
 
 ## LOAD list of all combinations, interventions indexed by number in each combination
 # if unavailable, source("CascadeCEA-Combination-0-Setup-combination.list.R")
@@ -54,7 +53,9 @@ colnames(outcome.dm.mx)[33:44] <- c("QALYs.sum", "costs.total.sum", "costs.hru.s
                                     "costs.oat.sum", "costs.prep.sum", "costs.prep.tests.sum", "costs.test.sum", "int.costs.sum",       
                                     "int.impl.costs.sum", "int.sust.costs.sum")
 outcome.dm.mx[2, ]      <- comb.eva.func(input.parameters = all.params, current.int = current.int)
+
+###answers
 new.incidence.by.year<-outcome.dm.mx[2,7:32]
-which(new.incidence.by.year/6755896<=0.0001)#integer(0), the target cannot be reached
+which(new.incidence.by.year/6755896<=0.0001)#integer(0), the target of epidemic control cannot be reached
 which.min(new.incidence.by.year/6755896)#gives the year of minimum new incidence rate
-min(new.incidence.by.year/6755896)#minimum new incidence rate
+print(c("minimum new incidence rate:",min(new.incidence.by.year/6755896)))
